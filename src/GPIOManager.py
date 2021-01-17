@@ -15,8 +15,8 @@ class GPIOManager:
     __clockPin = 12       # SH_CP Pin of 74HC595
     __digitPin = (11,13,15,19)
     __clearScreenCode = 0xff
-    __digits = {0x01,0x02,0x04,0x08}
-    __number = (0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90)
+    __digitAtPos = {0x01,0x02,0x04,0x08}
+    __digit = (0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90)
     __currentNumber = 0
 
     def setup(self):
@@ -53,34 +53,34 @@ class GPIOManager:
         GPIO.output(self.__digitPin[2],GPIO.LOW if ((digitCode&0x02) == 0x02) else GPIO.HIGH)
         GPIO.output(self.__digitPin[3],GPIO.LOW if ((digitCode&0x01) == 0x01) else GPIO.HIGH)
 
-    def __displayDigit(self, digitCode, digit):
+    def __displayDigit(self, digitCode, index):
         self.__clearScreen()   # eliminate residual display
         self.__selectDigit(digitCode)   # Select the first, and display the single digit
-        self.__outData(self.__number[digit])
+        self.__outData(self.__digit[index])
         time.sleep(0.003) 
     
     def __clearScreen(self):
         self.__outData(self.__clearScreenCode)
 
     def __displayNumber(self):
-        self.__displayDigit(self.__digits[0], self.__number%10)
-        if self.__number < 10:
+        self.__displayDigit(self.__digitAtPos[0], self.__currentNumber%10)
+        if self.__currentNumber < 10:
             self.__clearScreen()
         else:
-            self.__displayDigit(self.__digits[2], self.__number%100//10)
-        if self.__number < 100:
+            self.__displayDigit(self.__digitAtPos[2], self.__currentNumber%100//10)
+        if self.__currentNumber < 100:
             self.__clearScreen()
         else:
-            self.__displayDigit(self.__digits[2], self.__number%1000//100)
-        if self.__number < 1000:
+            self.__displayDigit(self.__digitAtPos[2], self.__currentNumber%1000//100)
+        if self.__currentNumber < 1000:
             self.__clearScreen()
         else:
-            self.__displayDigit(self.__digits[3], self.__number%10000//1000)
+            self.__displayDigit(self.__digitAtPos[3], self.__currentNumber%10000//1000)
 
 
     def __displayLoop(self):
-        endtime = datetime.now() + datetime.timedelta(milliseconds=1000)
-        while (datetime.now() < endtime):
+        endtime = int(round(time.time() * 1000)) + 1000
+        while (int(round(time.time() * 1000)) < endtime):
             self.__displayNumber()
 
     def display(self, number):
