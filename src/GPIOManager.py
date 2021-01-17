@@ -71,7 +71,9 @@ class GPIOManager:
                 self.__displayDigit(self.__digitAtPos[i], self.__currentNumber%10**(i+1)//10**i)
 
     def __displayLoop(self):
-        endtime = int(round(time.time() * 1000)) + 1000
+        endtime = int(round(time.time() * 1000)) + 100 # update number every 100 millisec 
+                                                       # => minimize error on secondly countdown 
+                                                       #    to miss a second by less 10 %
         while (int(round(time.time() * 1000)) < endtime):
             self.__displayNumber()
 

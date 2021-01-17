@@ -17,26 +17,14 @@ CountDownMan.setSmallestTickUnit(ConfigMan.getString("smallest tick intervall"))
 CountDownMan.setDisplayMaxDigits(ConfigMan.getInteger("display max digits"))
 
 #debugging GPIO output start
-for i in range(0,10):
-    GPIOMan.display(i)
-GPIOMan.display(100)
-GPIOMan.display(1000)
-GPIOMan.display(10000)
-GPIOMan.display(100009)
-GPIOMan.display(1000099)
-GPIOMan.display(10000999)
-GPIOMan.display(100009999)
-GPIOMan.display(9999)
-GPIOMan.display(999)
-GPIOMan.display(99)
-GPIOMan.display(9)
-GPIOMan.display(0)
-GPIOMan.display(0)
-GPIOMan.display(0)
+#for i in range(0,11):
+#    GPIOMan.display(i)
+#GPIOMan.display(100)
+#GPIOMan.display(1000)
+#GPIOMan.display(10000)
 #debugging GPIO output end
 
-# plan:
-# 
-# while (CountDownMan.ticksLeft()):
-# 	GPIOMan.display(CountDownMan.getCurrentTickValue())
-# 	CountDownMan.waitInterval()
+while (CountDownMan.ticksLeft()):
+    GPIOMan.display(CountDownMan.getCurrentTickValue())
+    
+print("countdown ended:", CountDownMan.getAimedDateTime())

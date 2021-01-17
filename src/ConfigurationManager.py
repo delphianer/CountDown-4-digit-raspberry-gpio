@@ -4,7 +4,7 @@ from datetime import datetime
 class ConfigurationManager:
 
 	__config = {
-		"aimed date and time" : "2021-04-04T00:00:00", # easter sunday, using utc time
+		"aimed date and time" : "2021-04-04T00:00:00",#"2021-04-04T20:31:00", # easter sunday, using utc time
 		"smallest tick intervall" : "sec", # smallest tick unit: sec / min / hrs / days
 		"display max digits" : 4
 		}
