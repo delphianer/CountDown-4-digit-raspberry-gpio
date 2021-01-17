@@ -17,9 +17,8 @@ CountDownMan.setSmallestTickUnit(ConfigMan.getString("smallest tick intervall"))
 CountDownMan.setDisplayMaxDigits(ConfigMan.getInteger("display max digits"))
 
 #debugging GPIO output start
-GPIOMan.display(0)
-GPIOMan.display(1)
-GPIOMan.display(10)
+for i in range(0,10):
+    GPIOMan.display(i)
 GPIOMan.display(100)
 GPIOMan.display(1000)
 GPIOMan.display(10000)
