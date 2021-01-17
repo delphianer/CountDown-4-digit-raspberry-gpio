@@ -26,14 +26,15 @@ class CountDownManager:
         hoursLeft = minutesLeft // 60
         daysLeft = hoursLeft // 24
         
-        if self.__maxNumberOnDisplay < secondsLeft:
+        if self.__maxNumberOnDisplay > secondsLeft:
             ticksLeft = secondsLeft
-        elif self.__maxNumberOnDisplay < minutesLeft:
-            ticksLeft = secondsLeft
-        elif self.__maxNumberOnDisplay < hoursLeft:
-            ticksLeft = secondsLeft
+        elif self.__maxNumberOnDisplay > minutesLeft:
+            ticksLeft = minutesLeft
+        elif self.__maxNumberOnDisplay > hoursLeft:
+            ticksLeft = hoursLeft
         else:
             ticksLeft = daysLeft
+
         return ticksLeft
     
     def getAimedDateTime(self):

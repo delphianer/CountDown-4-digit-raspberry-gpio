@@ -1,6 +1,6 @@
 # GPIOManager handles all commands to GPIO
 import os
-if os.name != 'nt':
+if os.name != 'nt': # developing on windows without RPi.GPIO
     import RPi.GPIO as GPIO
 import threading
 from datetime import datetime
