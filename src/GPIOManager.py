@@ -3,7 +3,8 @@ import os
 if os.name != 'nt':
     import RPi.GPIO as GPIO
 import threading
-from datetime import time, datetime
+from datetime import datetime
+import time
 
 class GPIOManager:
 
@@ -87,4 +88,3 @@ class GPIOManager:
         self.__currentNumber = number
         if os.name == 'posix': # on raspberry pi zero
             self.__displayLoop()
-        pass
