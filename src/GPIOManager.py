@@ -3,6 +3,7 @@ import os
 if os.name != 'nt':
     import RPi.GPIO as GPIO
 import threading
+from datetime import time, datetime
 
 class GPIOManager:
 
@@ -13,7 +14,10 @@ class GPIOManager:
     __latchPin = 16      # ST_CP Pin of 74HC595
     __clockPin = 12       # SH_CP Pin of 74HC595
     __digitPin = (11,13,15,19)
+    __clearScreenCode = 0xff
+    __digits = {0x01,0x02,0x04,0x08}
     __number = (0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90)
+    __currentNumber = 0
 
     def setup(self):
         GPIO.setmode(GPIO.BOARD)     # use PHYSICAL GPIO Numbering
@@ -29,8 +33,58 @@ class GPIOManager:
             self.setup()
         pass
 
+    def __shiftOut(self,dPin,cPin,order,val):
+        for i in range(0,8):
+            GPIO.output(cPin,GPIO.LOW)
+            if(order == self.__LSBFIRST):
+                GPIO.output(dPin,(0x01&(val>>i)==0x01) and GPIO.HIGH or GPIO.LOW)
+            elif(order == self.__MSBFIRST):
+                GPIO.output(dPin,(0x80&(val<<i)==0x80) and GPIO.HIGH or GPIO.LOW)
+            GPIO.output(cPin,GPIO.HIGH)
+
+    def __outData(self, digit):
+        GPIO.output(self.__latchPin,GPIO.LOW)
+        self.__shiftOut(self.__dataPin,self.__clockPin,self.__MSBFIRST,digit)
+        GPIO.output(self.__latchPin,GPIO.HIGH)
+
+    def __selectDigit(self, digitCode):
+        GPIO.output(self.__digitPin[0],GPIO.LOW if ((digitCode&0x08) == 0x08) else GPIO.HIGH)
+        GPIO.output(self.__digitPin[1],GPIO.LOW if ((digitCode&0x04) == 0x04) else GPIO.HIGH)
+        GPIO.output(self.__digitPin[2],GPIO.LOW if ((digitCode&0x02) == 0x02) else GPIO.HIGH)
+        GPIO.output(self.__digitPin[3],GPIO.LOW if ((digitCode&0x01) == 0x01) else GPIO.HIGH)
+
+    def __displayDigit(self, digitCode, digit):
+        self.__clearScreen()   # eliminate residual display
+        self.__selectDigit(digitCode)   # Select the first, and display the single digit
+        self.__outData(self.__number[digit])
+        time.sleep(0.003) 
+    
+    def __clearScreen(self):
+        self.__outData(self.__clearScreenCode)
+
+    def __displayNumber(self):
+        self.__displayDigit(self.__digits[0], self.__number%10)
+        if self.__number < 10:
+            self.__clearScreen()
+        else:
+            self.__displayDigit(self.__digits[2], self.__number%100//10)
+        if self.__number < 100:
+            self.__clearScreen()
+        else:
+            self.__displayDigit(self.__digits[2], self.__number%1000//100)
+        if self.__number < 1000:
+            self.__clearScreen()
+        else:
+            self.__displayDigit(self.__digits[3], self.__number%10000//1000)
+
+
+    def __displayLoop(self):
+        endtime = datetime.now() + datetime.timedelta(milliseconds=1000)
+        while (datetime.now() < endtime):
+            self.__displayNumber()
+
     def display(self, number):
-        print("display(",number,")")
-        if os.name == 'arm':
-            print("name == arm")
+        self.__currentNumber = number
+        if os.name == 'posix': # on raspberry pi zero
+            self.__displayLoop()
         pass
