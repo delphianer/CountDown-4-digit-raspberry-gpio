@@ -1,9 +1,11 @@
 # ConfigurationManager handles everything about the Configuration
 
-class ConfigurationManagerClass:
+class ConfigurationManager:
 
 	#todo: make private
-	config = {"aimed date and time" : "todo:date and time"}
+	config = {"aimed date and time" : "todo:date and time",
+		"smallest tick intervall" : "sec",
+		"display max digits" : 4}
 
 	def __init__(self):
 		print("hello class world")
