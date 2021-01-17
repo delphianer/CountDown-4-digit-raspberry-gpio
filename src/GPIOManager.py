@@ -64,20 +64,11 @@ class GPIOManager:
         self.__outData(self.__clearScreenCode)
 
     def __displayNumber(self):
-        self.__displayDigit(self.__digitAtPos[0], self.__currentNumber%10)
-        if self.__currentNumber < 10:
-            self.__clearScreen()
-        else:
-            self.__displayDigit(self.__digitAtPos[2], self.__currentNumber%100//10)
-        if self.__currentNumber < 100:
-            self.__clearScreen()
-        else:
-            self.__displayDigit(self.__digitAtPos[2], self.__currentNumber%1000//100)
-        if self.__currentNumber < 1000:
-            self.__clearScreen()
-        else:
-            self.__displayDigit(self.__digitAtPos[3], self.__currentNumber%10000//1000)
-
+        for i in range(0, 3):
+            if self.__currentNumber < 10**i:
+                self.__clearScreen()
+            else:
+                self.__displayDigit(self.__digitAtPos[i], self.__currentNumber%10**(i+1)//10**i)
 
     def __displayLoop(self):
         endtime = int(round(time.time() * 1000)) + 1000
