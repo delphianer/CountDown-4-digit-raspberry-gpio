@@ -12,10 +12,10 @@ print("display max digits=",ConfigMan.getInteger("display max digits"))
 
 GPIOMan = GPIOManager.GPIOManager()
 CountDownMan = CountDownManager.CountDownManager(ConfigMan.getDateTime("aimed date and time"))
+CountDownMan.setSmallestTickUnit(ConfigMan.getString("smallest tick intervall"))
+
 
 # plan:
-# CountDownMan.setSmallestTickUnit(ConfigMan.getString("smallest tick intervall"))
-# smallest tick unit: sec / min / hrs / days
 # CountDownMan.setDisplayMaxDigits(ConfigMan.getInteger("display max digits"))
 # while (CountDownMan.ticksLeft()):
 # 	GPIOMan.display(CountDownMan.getCurrentTickValue())
