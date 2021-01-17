@@ -31,6 +31,8 @@ GPIOMan.display(999)
 GPIOMan.display(99)
 GPIOMan.display(9)
 GPIOMan.display(0)
+GPIOMan.display(0)
+GPIOMan.display(0)
 #debugging GPIO output end
 
 # plan:

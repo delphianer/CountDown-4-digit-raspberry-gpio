@@ -64,12 +64,11 @@ class GPIOManager:
         self.__outData(self.__clearScreenCode)
 
     def __displayNumber(self):
-        if os.name == 'posix': # on raspberry pi zero
-            for i in range(0, 3):
-                if self.__currentNumber < 10**i:
-                    self.__clearScreen()
-                else:
-                    self.__displayDigit(self.__digitAtPos[i], self.__currentNumber%10**(i+1)//10**i)
+        for i in range(0, 4):
+            if i > 0 and self.__currentNumber < 10**i:
+                self.__clearScreen()
+            else:
+                self.__displayDigit(self.__digitAtPos[i], self.__currentNumber%10**(i+1)//10**i)
 
     def __displayLoop(self):
         endtime = int(round(time.time() * 1000)) + 1000
@@ -79,4 +78,7 @@ class GPIOManager:
     def display(self, number):
         self.__currentNumber = number
         print(number)
-        self.__displayLoop()
+        if os.name == 'posix': # on raspberry pi zero
+            self.__displayLoop()
+        else:
+            time.sleep(1) # 1 sec delay
