@@ -5,7 +5,7 @@ class ConfigurationManager:
 
 	__config = {
 		"aimed date and time" : "2021-04-04T00:00:00", # easter sunday, using utc time
-		"smallest tick intervall" : "sec",
+		"smallest tick intervall" : "sec", # smallest tick unit: sec / min / hrs / days
 		"display max digits" : 4
 		}
 	datetimeFormat = '%Y-%m-%dT%H:%M:%S'
